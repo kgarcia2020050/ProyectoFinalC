@@ -1,19 +1,104 @@
-// ConsoleApplication1.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
-//
-
 #include <iostream>
+#include <fstream>
+#include <string>
+#include<locale>
 
-int main()
-{
-    std::cout << "Hello World!\n";
+using namespace std;
+
+struct Empleado {
+    int id;
+    string nombres;
+    string apellidos;
+    string fechaNacimiento;
+    string DPI;
+    string direccion;
+    string telefono;
+};
+
+int obtenerUltimoId() {
+    int ultimoId = 0;
+    ifstream file("empleados.txt");
+    if (file) {
+        Empleado emp;
+        while (file >> emp.id >> emp.nombres >> emp.apellidos >> emp.fechaNacimiento >> emp.DPI >> emp.direccion >> emp.telefono) {
+            ultimoId = emp.id;
+        }
+        file.close();
+    }
+    return ultimoId;
 }
 
-// Ejecutar programa: Ctrl + F5 o menú Depurar > Iniciar sin depurar
-// Depurar programa: F5 o menú Depurar > Iniciar depuración
+void guardarEmpleado(const Empleado& emp) {
+    ofstream file("empleados.txt", ios::app);
+    if (file) {
+        file << emp.id << " " << emp.nombres << " " << emp.apellidos << " " << emp.fechaNacimiento << " " << emp.DPI << " " << emp.direccion << " " << emp.telefono << endl;
+        file.close();
+    }
+    cout << "Empleado agregado con éxito." << endl;
+}
 
-// Sugerencias para primeros pasos: 1. Use la ventana del Explorador de soluciones para agregar y administrar archivos
-//   2. Use la ventana de Team Explorer para conectar con el control de código fuente
-//   3. Use la ventana de salida para ver la salida de compilación y otros mensajes
-//   4. Use la ventana Lista de errores para ver los errores
-//   5. Vaya a Proyecto > Agregar nuevo elemento para crear nuevos archivos de código, o a Proyecto > Agregar elemento existente para agregar archivos de código existentes al proyecto
-//   6. En el futuro, para volver a abrir este proyecto, vaya a Archivo > Abrir > Proyecto y seleccione el archivo .sln
+void mostrarEmpleados() {
+    ifstream file("empleados.txt");
+    if (file) {
+        Empleado emp;
+        while (file >> emp.id >> emp.nombres >> emp.apellidos >> emp.fechaNacimiento >> emp.DPI >> emp.direccion >> emp.telefono) {
+            cout << "ID: " << emp.id << "\nNombres: " << emp.nombres << "\nApellidos: " << emp.apellidos << "\nFecha de Nacimiento: " << emp.fechaNacimiento << "\nDPI: " << emp.DPI << "\nDirección: " << emp.direccion << "\nTeléfono: " << emp.telefono << "\n" << endl;
+        }
+        file.close();
+    }
+    else {
+        cout << "No hay empleados registrados." << endl;
+    }
+}
+
+void main() {
+    setlocale(LC_ALL, "spanish");
+    int option;
+    int ultimoId = obtenerUltimoId();
+
+    do {
+        cout << "Menú Principal" << endl;
+        cout << "1. Ingreso de datos de empleados" << endl;
+        cout << "2. Mostrar lista de empleados" << endl;
+        cout << "3. Salir" << endl;
+        cout << "Ingrese la opción: ";
+        cin >> option;
+
+        switch (option) {
+        case 1: {
+            Empleado newEmployee;
+            newEmployee.id = ultimoId + 1;
+            ultimoId = newEmployee.id;
+
+            cin.ignore();
+            cout << "Nombres: ";
+            getline(cin, newEmployee.nombres);
+            cout << "Apellidos: ";
+            getline(cin, newEmployee.apellidos);
+            cout << "Fecha de Nacimiento: ";
+            getline(cin, newEmployee.fechaNacimiento);
+            cout << "DPI: ";
+            getline(cin, newEmployee.DPI);
+            cout << "Dirección: ";
+            getline(cin, newEmployee.direccion);
+            cout << "Teléfono: ";
+            getline(cin, newEmployee.telefono);
+
+            guardarEmpleado(newEmployee);
+            break;
+        }
+
+        case 2:
+            mostrarEmpleados();
+            break;
+
+        case 3:
+            cout << "Saliendo del programa." << endl;
+            break;
+
+        default:
+            cout << "Opción inválida. Intente de nuevo." << endl;
+        }
+    } while (option != 3);
+
+}
