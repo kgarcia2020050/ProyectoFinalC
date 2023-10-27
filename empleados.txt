@@ -1,4 +1,4 @@
-1 Juan Perez 1/1/1 123 123 123
-2 Pedro Perez 1/1/1 1 1 1
-3 Pedro Juan 1/1/1 123 123 123
-4 Kenneth Garcia 1.1.1 123 123 123
+1 Juan Perez 1/1/1 123 123 123 activo
+2 Pedro Perez 1/1/1 1 1 1 activo
+3 Pedro Juan 1/1/1 123 123 123 activo
+4 Kenneth Garcia 1.1.1 123 123 123 activo
